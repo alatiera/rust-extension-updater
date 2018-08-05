@@ -18,10 +18,11 @@ fn get_sha(path: &str) -> Result<String, Error> {
     let mut resp = reqwest::get(&format!("{}.sha256", path))?;
     assert!(resp.status().is_success());
 
-    let mut content = String::new();
-    resp.read_to_string(&mut content)?;
-
-    Ok(String::from(content.split_whitespace().next().unwrap()))
+    resp.text()?
+        .split_whitespace()
+        .next()
+        .map(|s| s.into())
+        .ok_or_else(|| format_err!("Failed to get sha"))
 }
 
 
