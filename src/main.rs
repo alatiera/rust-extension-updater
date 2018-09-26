@@ -1,16 +1,12 @@
+#![deny(unused)]
+
 extern crate clap;
-extern crate serde;
 #[macro_use]
-extern crate serde_json;
 extern crate failure;
-extern crate regex;
 extern crate reqwest;
 
 use clap::{App, Arg};
 use failure::Error;
-use regex::Regex;
-use std::fs::File;
-use std::io::Read;
 
 fn get_sha(path: &str) -> Result<String, Error> {
     let mut resp = reqwest::get(&format!("{}.sha256", path))?;
@@ -23,61 +19,61 @@ fn get_sha(path: &str) -> Result<String, Error> {
         .ok_or_else(|| format_err!("Failed to get sha"))
 }
 
-fn main() {
+fn main() -> Result<(), Error> {
     let matches = App::new("Update flatpak json")
         .version("1.0")
         .author("Daniel García <danigm@wadobo.com>")
-        .about("Updates the flatpak .json file with new rust stable download")
+        .about("Prints the sha of Rustc release tarballs")
         .arg(
-            Arg::with_name("JSON")
-                .help("the json file to update")
+            Arg::with_name("VERSION")
+                .help("the rustc version")
                 .required(true)
                 .index(1),
-        ).arg(
-            Arg::with_name("CURRENT_VERSION")
-                .help("the rust version in the file")
-                .required(true)
-                .index(2),
-        ).arg(
-            Arg::with_name("NEXT_VERSION")
-                .help("the new rust version")
-                .required(true)
-                .index(3),
         ).get_matches();
 
-    let json_file = matches.value_of("JSON").unwrap();
-    let from_v = matches.value_of("CURRENT_VERSION").unwrap();
-    let to_v = matches.value_of("NEXT_VERSION").unwrap();
+    let version = matches.value_of("VERSION").unwrap();
+    let sources = vec![
+        (
+            "source tarball",
+            format!(
+                "https://static.rust-lang.org/dist/rustc-{}-src.tar.gz",
+                version
+            ),
+        ),
+        (
+            "x86_64",
+            format!(
+                "https://static.rust-lang.org/dist/rust-{}-x86_64-unknown-linux-gnu.tar.gz",
+                version
+            ),
+        ),
+        (
+            "i686",
+            format!(
+                "https://static.rust-lang.org/dist/rust-{}-i686-unknown-linux-gnu.tar.gz",
+                version
+            ),
+        ),
+        (
+            "armv7hf",
+            format!(
+                "https://static.rust-lang.org/dist/rust-{}-aarch64-unknown-linux-gnu.tar.gz",
+                version
+            ),
+        ),
+        (
+            "aarch64",
+            format!(
+                "https://static.rust-lang.org/dist/rust-{}-armv7-unknown-linux-gnueabihf.tar.gz",
+                version
+            ),
+        ),
+    ];
 
-    let re = Regex::new(&format!("{}", from_v).replace('.', "\\.")).unwrap();
-
-    eprintln!("Updating {} from {} to {}", json_file, from_v, to_v);
-
-    let mut file = File::open(json_file).unwrap();
-    let mut serialized = String::new();
-    file.read_to_string(&mut serialized).unwrap();
-
-    let mut json: serde_json::Value = serde_json::from_str(&serialized).unwrap();
-
-    {
-        let modules = json["modules"].as_array_mut().unwrap();
-        for m in modules {
-            if m["name"] != "rust" {
-                continue;
-            }
-
-            let sources = m["sources"].as_array_mut().unwrap();
-            for s in sources {
-                let url = String::from(s["url"].as_str().unwrap());
-                eprintln!("URL: {}", &url);
-                let newurl = re.replace_all(&url, to_v);
-                eprintln!("new URL: {}", newurl);
-                s["sha256"] = json!(get_sha(&newurl).unwrap());
-                s["url"] = json!(newurl);
-            }
-        }
+    for (arch, url) in sources {
+        let sha = get_sha(&url)?;
+        println!("{}: {}", arch, sha);
     }
 
-    let output = serde_json::to_string_pretty(&json).unwrap();
-    println!("{}", output);
+    Ok(())
 }
