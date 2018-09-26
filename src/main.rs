@@ -19,6 +19,28 @@ fn get_sha(path: &str) -> Result<String, Error> {
         .ok_or_else(|| format_err!("Failed to get sha"))
 }
 
+#[test]
+fn test_get_sha() -> Result<(), Error> {
+    let source = "f1b0728b66ce6bce6d72bbe5ea9e3a24ea22a045665da2ed8fcdfad14f61a349";
+    let x86_64 = "b36998aea6d58525f25d89f1813b6bfd4cad6ff467e27bd11e761a20dde43745";
+    let i686 = "05e2880beca45e7319074d2268fd79a70c7aade2fb14dbcbf39585b5560f2048";
+    let armv7hf = "2685224f67b2ef951e0e8b48829f786cbfed95e19448ba292ac33af719843dbe";
+    let aarch64 = "2cae2ecc366914707d6b753a96505c727df69df8bcbc1f8d14fbd66fca005239";
+
+    let s = "https://static.rust-lang.org/dist/rustc-1.29.1-src.tar.gz";
+    let x = "https://static.rust-lang.org/dist/rust-1.29.1-x86_64-unknown-linux-gnu.tar.gz";
+    let i = "https://static.rust-lang.org/dist/rust-1.29.1-i686-unknown-linux-gnu.tar.gz";
+    let v7hf = "https://static.rust-lang.org/dist/rust-1.29.1-aarch64-unknown-linux-gnu.tar.gz";
+    let aa = "https://static.rust-lang.org/dist/rust-1.29.1-armv7-unknown-linux-gnueabihf.tar.gz";
+
+    assert_eq!(get_sha(s)?, source);
+    assert_eq!(get_sha(x)?, x86_64);
+    assert_eq!(get_sha(i)?, i686);
+    assert_eq!(get_sha(v7hf)?, armv7hf);
+    assert_eq!(get_sha(aa)?, aarch64);
+    Ok(())
+}
+
 fn main() -> Result<(), Error> {
     let matches = App::new("Update flatpak json")
         .version("1.0")
