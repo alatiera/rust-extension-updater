@@ -79,14 +79,14 @@ fn main() -> Result<(), Error> {
         (
             "armv7hf",
             format!(
-                "https://static.rust-lang.org/dist/rust-{}-armv7-unknown-linux-gnu.tar.gz",
+                "https://static.rust-lang.org/dist/rust-{}-armv7-unknown-linux-gnueabihf.tar.gz",
                 version
             ),
         ),
         (
             "aarch64",
             format!(
-                "https://static.rust-lang.org/dist/rust-{}-aarch64-unknown-linux-gnueabihf.tar.gz",
+                "https://static.rust-lang.org/dist/rust-{}-aarch64-unknown-linux-gnu.tar.gz",
                 version
             ),
         ),
