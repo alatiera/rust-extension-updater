@@ -38,8 +38,8 @@ fn test_get_sha() -> Result<(), Error> {
     assert_eq!(get_sha(s)?, source);
     assert_eq!(get_sha(x)?, x86_64);
     assert_eq!(get_sha(i)?, i686);
-    assert_eq!(get_sha(arm)?, armv7hf);
     assert_eq!(get_sha(aa)?, aarch64);
+    assert_eq!(get_sha(arm)?, armv7hf);
     assert_eq!(get_sha(p)?, powerpc64le);
     Ok(())
 }
@@ -80,16 +80,16 @@ fn main() -> Result<(), Error> {
             ),
         ),
         (
-            "armv7hf",
+            "aarch64",
             format!(
-                "https://static.rust-lang.org/dist/rust-{}-armv7-unknown-linux-gnueabihf.tar.xz",
+                "https://static.rust-lang.org/dist/rust-{}-aarch64-unknown-linux-gnu.tar.xz",
                 version
             ),
         ),
         (
-            "aarch64",
+            "armv7hf",
             format!(
-                "https://static.rust-lang.org/dist/rust-{}-aarch64-unknown-linux-gnu.tar.xz",
+                "https://static.rust-lang.org/dist/rust-{}-armv7-unknown-linux-gnueabihf.tar.xz",
                 version
             ),
         ),
