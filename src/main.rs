@@ -21,17 +21,17 @@ fn get_sha(path: &str) -> Result<String, Error> {
 
 #[test]
 fn test_get_sha() -> Result<(), Error> {
-    let source = "f1b0728b66ce6bce6d72bbe5ea9e3a24ea22a045665da2ed8fcdfad14f61a349";
-    let x86_64 = "b36998aea6d58525f25d89f1813b6bfd4cad6ff467e27bd11e761a20dde43745";
-    let i686 = "05e2880beca45e7319074d2268fd79a70c7aade2fb14dbcbf39585b5560f2048";
-    let aarch64 = "2685224f67b2ef951e0e8b48829f786cbfed95e19448ba292ac33af719843dbe";
-    let armv7hf = "2cae2ecc366914707d6b753a96505c727df69df8bcbc1f8d14fbd66fca005239";
+    let source = "4d0d64c60561ea8acc01b866f48e42c906b60215c43ff7d7b088ee21bdcd813e";
+    let x86_64 = "6e38e51cc5cc2a6e66401ed88571fb044792e0694b2af8edd9b12fbe87c4e1f9";
+    let i686 = "16107f767fe874fc870e46ffc74cfaeae670d5ff4b9b620f9867c87c26fb58f2";
+    let aarch64 = "bb8664f0aa5a5c310f0ec51bd6520539ede94a39aebdb13fd81f8658c18eec2c";
+    let armv7hf = "2cfab068b16c0e4e9450abb1826d82c55c92c0438e3c82596458884863bf2857";
 
-    let s = "https://static.rust-lang.org/dist/rustc-1.29.1-src.tar.gz";
-    let x = "https://static.rust-lang.org/dist/rust-1.29.1-x86_64-unknown-linux-gnu.tar.gz";
-    let i = "https://static.rust-lang.org/dist/rust-1.29.1-i686-unknown-linux-gnu.tar.gz";
-    let aa = "https://static.rust-lang.org/dist/rust-1.29.1-aarch64-unknown-linux-gnu.tar.gz";
-    let arm = "https://static.rust-lang.org/dist/rust-1.29.1-armv7-unknown-linux-gnueabihf.tar.gz";
+    let s = "https://static.rust-lang.org/dist/rustc-1.29.1-src.tar.xz";
+    let x = "https://static.rust-lang.org/dist/rust-1.29.1-x86_64-unknown-linux-gnu.tar.xz";
+    let i = "https://static.rust-lang.org/dist/rust-1.29.1-i686-unknown-linux-gnu.tar.xz";
+    let aa = "https://static.rust-lang.org/dist/rust-1.29.1-aarch64-unknown-linux-gnu.tar.xz";
+    let arm = "https://static.rust-lang.org/dist/rust-1.29.1-armv7-unknown-linux-gnueabihf.tar.xz";
 
     assert_eq!(get_sha(s)?, source);
     assert_eq!(get_sha(x)?, x86_64);
@@ -58,35 +58,35 @@ fn main() -> Result<(), Error> {
         (
             "source tarball",
             format!(
-                "https://static.rust-lang.org/dist/rustc-{}-src.tar.gz",
+                "https://static.rust-lang.org/dist/rustc-{}-src.tar.xz",
                 version
             ),
         ),
         (
             "x86_64",
             format!(
-                "https://static.rust-lang.org/dist/rust-{}-x86_64-unknown-linux-gnu.tar.gz",
+                "https://static.rust-lang.org/dist/rust-{}-x86_64-unknown-linux-gnu.tar.xz",
                 version
             ),
         ),
         (
             "i686",
             format!(
-                "https://static.rust-lang.org/dist/rust-{}-i686-unknown-linux-gnu.tar.gz",
+                "https://static.rust-lang.org/dist/rust-{}-i686-unknown-linux-gnu.tar.xz",
                 version
             ),
         ),
         (
             "armv7hf",
             format!(
-                "https://static.rust-lang.org/dist/rust-{}-armv7-unknown-linux-gnueabihf.tar.gz",
+                "https://static.rust-lang.org/dist/rust-{}-armv7-unknown-linux-gnueabihf.tar.xz",
                 version
             ),
         ),
         (
             "aarch64",
             format!(
-                "https://static.rust-lang.org/dist/rust-{}-aarch64-unknown-linux-gnu.tar.gz",
+                "https://static.rust-lang.org/dist/rust-{}-aarch64-unknown-linux-gnu.tar.xz",
                 version
             ),
         ),
